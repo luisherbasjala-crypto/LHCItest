@@ -23,9 +23,14 @@ jobs:
           username: ${{ vars.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_SECRET }}
 
+      - name: Debug Dockerfile presence
+        run: |
+          echo "Revizar la presencia del Dockerfile"
+          ls -a ./App
+          
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: ./App
-          file: ./Dockerfile
+          file: ./App/Dockerfile
 
