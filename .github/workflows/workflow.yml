@@ -30,11 +30,11 @@ jobs:
       - name: Docker build
         run: |
           docker build -f ./App/Dockerfile
-          -t "${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ IMAGE_TAG }}" ./app
+          -t "${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}" ./app
 
       - name: Push to Docker
         run: |
-          docker push "${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ IMAGE_TAG }}
+          docker push "${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}
 
 
       
