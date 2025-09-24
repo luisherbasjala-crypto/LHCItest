@@ -27,10 +27,20 @@ jobs:
         run: |
           echo "Revizar la presencia del Dockerfile"
           ls -a ./App
-          
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./App
-          file: ./App/Dockerfile
+      - name: Docker build
+        run: |
+          docker build -f ./App/Dockerfile
+          -t "${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ IMAGE_TAG }}" ./app
 
+      - name: Push to Docker
+        run: |
+          docker push "${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ IMAGE_TAG }}
+
+      
+      # - name: Build and push Docker image
+      #  uses: docker/build-push-action@v5
+      #  with:
+      #    context: ./App
+      #   file: ./App/Dockerfile
+
+      
