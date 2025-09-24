@@ -13,6 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Debug Variable
+        run: |
+          echo "El user es: ${{ vars.DOCKERHUB_USER }}"
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
