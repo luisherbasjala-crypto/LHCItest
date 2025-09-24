@@ -2,7 +2,7 @@
 FROM python:3.12-slim
  
 
-WORKDIR /app
+WORKDIR /App
 
 
 COPY requirements.txt .
