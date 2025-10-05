@@ -55,7 +55,7 @@ jobs:
 
       - name: Ejecutar contenedor en segundo plano
         run: |
-          docker run -d --name mi-app-container -p 8080:80 ${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}
+          docker run -d --name mi-app-container -p 5500:80 ${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}
 
       - name: Esperar que el contenedor esté listo
         run: |
