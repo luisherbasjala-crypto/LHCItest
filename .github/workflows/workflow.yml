@@ -22,7 +22,7 @@ jobs:
       - name: Debug Dockerfile presence
         run: |
           echo "Revisar la presencia del Dockerfile"
-          ls -a ./App
+          ls ./App
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
