@@ -63,7 +63,7 @@ jobs:
           sleep 20
  
       - name: Test con curl
-        shell: pwsh
+        shell: powershell
         run: |
           Write-Host "Probando el endpoint..."
           $response = Invoke-WebRequest -Uri http://localhost:5500 -UseBasicParsing
