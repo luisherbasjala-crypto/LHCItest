@@ -59,8 +59,8 @@ jobs:
 
       - name: Esperar que el contenedor esté listo
         run: |
-          echo "Esperando 10 segundos para que el contenedor esté listo..."
-          sleep 10
+          echo "Esperando 20 segundos para que el contenedor esté listo..."
+          sleep 20
 
       - name: Test con curl
         run: |
