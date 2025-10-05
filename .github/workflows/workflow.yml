@@ -39,7 +39,7 @@ jobs:
           tags: ${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}
 
   run:
-    runs-on: [self-hosted, linux]
+    runs-on: [self-hosted]
     needs: build
 
     steps:
