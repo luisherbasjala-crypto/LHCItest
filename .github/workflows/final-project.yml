@@ -30,10 +30,6 @@ jobs:
           username: ${{ vars.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_SECRET }}
 
-      - name: Construir imagen Docker
-        run: |
-          docker build -t mi-app .
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -66,9 +62,20 @@ jobs:
           echo "Esperando 10 segundos para que el contenedor esté listo..."
           sleep 10
 
+      
       - name: Test con curl
         run: |
-          curl --fail http://localhost:8080 || (echo "El contenedor no respondió correctamente" && exit 1)
+          echo "Probando el endpoint..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          if [ "$response" -ne 200 ]; then
+            echo "Error: respuesta HTTP $response"
+          exit 1
+          fi
+
+      - name: Mostrar logs del contenedor (si falla)
+        if: failure()
+        run: |
+          docker logs mi-app-container || echo "No se pudo obtener logs"
 
       - name: Parar y eliminar contenedor
         run: |
