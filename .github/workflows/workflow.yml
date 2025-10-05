@@ -61,15 +61,16 @@ jobs:
         run: |
           echo "Esperando 20 segundos para que el contenedor esté listo..."
           sleep 20
-
+ 
       - name: Test con curl
+        shell: pwsh
         run: |
-          echo "Probando el endpoint..."
-          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5500)
-          if [ "$response" -ne 200 ]; then
-            echo "Error: respuesta HTTP $response"
+          Write-Host "Probando el endpoint..."
+          $response = Invoke-WebRequest -Uri http://localhost:5500 -UseBasicParsing
+          if ($response.StatusCode -ne 200) {
+            Write-Host "Error: respuesta HTTP $($response.StatusCode)"
             exit 1
-          fi
+          }
           
       - name: Mostrar logs del contenedor (si falla)
         if: failure()
