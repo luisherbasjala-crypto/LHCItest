@@ -1,1 +1,93 @@
+name: final-project
 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: [self-hosted, linux]
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Docker
+        run: |
+          docker --version
+          docker info
+      
+      - name: Debug Dockerfile presence
+        run: |
+          echo "Revisar la presencia del Dockerfile"
+          ls -a ./App
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ vars.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_SECRET }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./App
+          file: ./App/Dockerfile
+          push: true
+          tags: ${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}
+
+  run:
+    runs-on: [self-hosted, linux]
+    needs: build
+
+    steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ vars.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_SECRET }}
+
+      - name: Descargar imagen desde Docker Hub
+        run: |
+          docker pull ${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}
+
+      - name: Ejecutar contenedor en segundo plano
+        run: |
+          docker run -d --name mi-app-container -p 8080:80 ${{ vars.DOCKERHUB_USER }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}
+
+      - name: Esperar que el contenedor esté listo
+        run: |
+          echo "Esperando 10 segundos para que el contenedor esté listo..."
+          sleep 10
+
+      
+      - name: Test con curl
+        run: |
+          echo "Probando el endpoint..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          if [ "$response" -ne 200 ]; then
+            echo "Error: respuesta HTTP $response"
+          exit 1
+          fi
+
+      - name: Mostrar logs del contenedor (si falla)
+        if: failure()
+        run: |
+          docker logs mi-app-container || echo "No se pudo obtener logs"
+
+      - name: Parar y eliminar contenedor
+        run: |
+          docker stop mi-app-container
+          docker rm mi-app-container
+
+      - name: Limpiar imágenes y contenedores
+        run: |
+          docker system prune -af
+
+      
+      
+      
+
+    
