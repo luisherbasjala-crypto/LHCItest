@@ -59,8 +59,8 @@ jobs:
 
       - name: Esperar que el contenedor esté listo
         run: |
-          echo "Esperando 20 segundos para que el contenedor esté listo..."
-          sleep 20
+          echo "Esperando 10 segundos para que el contenedor esté listo..."
+          sleep 10
  
       - name: Test con curl
         shell: powershell
@@ -76,6 +76,11 @@ jobs:
         if: failure()
         run: |
           docker logs mi-app-container || echo "No se pudo obtener logs"
+
+      - name: Esperar para ver el resultado manual
+        run: |
+          echo "Esperando 30 segundos para confirmacion manual del container"
+          sleep 30
 
       - name: Parar y eliminar contenedor
         run: |
