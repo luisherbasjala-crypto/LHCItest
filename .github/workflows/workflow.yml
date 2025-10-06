@@ -85,12 +85,13 @@ jobs:
 
       - name: Mostrar logs del contenedor (si falla)
         if: failure()
-        shell: pwsh
+        shell: powershell
         run: |
+          Write-Host "Intentando mostrar logs del contenedor..."
           try {
             docker logs mi-app-container
           } catch {
-            Write-Output "No se pudo obtener logs"
+            Write-Host "No se pudo obtener logs"
           }
 
       - name: Esperar para ver el resultado manual
