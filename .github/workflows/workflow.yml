@@ -74,8 +74,13 @@ jobs:
           
       - name: Mostrar logs del contenedor (si falla)
         if: failure()
+        shell: pwsh
         run: |
-          docker logs mi-app-container || echo "No se pudo obtener logs"
+          try {
+            docker logs mi-app-container
+          } catch {
+            Write-Output "No se pudo obtener logs"
+          }
 
       - name: Esperar para ver el resultado manual
         run: |
