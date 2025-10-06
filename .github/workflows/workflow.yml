@@ -66,12 +66,23 @@ jobs:
         shell: powershell
         run: |
           Write-Host "Probando el endpoint..."
-          $response = Invoke-WebRequest -Uri http://localhost:5500 -UseBasicParsing
-          if ($response.StatusCode -ne 200) {
-            Write-Host "Error: respuesta HTTP $($response.StatusCode)"
+          try {
+            $response = Invoke-WebRequest -Uri http://localhost:5500 -UseBasicParsing
+            Write-Host "Código de estado: $($response.StatusCode)"
+            Write-Host "Encabezados:"
+            $response.Headers | ForEach-Object { Write-Host "$($_.Key): $($_.Value)" }
+            Write-Host "Contenido:"
+            Write-Host $response.Content
+            if ($response.StatusCode -ne 200) {
+              Write-Host "Error: respuesta HTTP $($response.StatusCode)"
+              exit 1
+            }
+          } catch {
+            Write-Host "Falló la solicitud HTTP"
+            Write-Host $_.Exception.Message
             exit 1
           }
-          
+
       - name: Mostrar logs del contenedor (si falla)
         if: failure()
         shell: pwsh
