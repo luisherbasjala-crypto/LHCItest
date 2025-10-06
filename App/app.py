@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Define una ruta para la página principal
 @app.route("/")
 def Tarea_Python():
-    return "¡Proyecto final si el comando CURL funciona!"
+    return "Hello, CI Pipeline!"
 	
 
 # Ejecuta la aplicación si este script es el principal
